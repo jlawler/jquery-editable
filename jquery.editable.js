@@ -43,7 +43,10 @@
     /**
      * Event listener that largens font size
      */
-    fontSizeToggler = function(e) {
+    editKeyKandler = function(e,a) {
+        if(e.data.closeOnEnter && (!e.shiftKey) && e.keyCode==13){
+          $currentlyEdited.editable('close');
+        } 
         if(e.metaKey && (e.keyCode == 38 || e.keyCode == 40)) {
             var fontSize = parseInt($textArea.css('font-size'), 10);
             fontSize += e.keyCode == 40 ? -1 : 1;
@@ -93,7 +96,7 @@
         }
 
         if( opts.toggleFontSize ) {
-            $win.bind('keydown', fontSizeToggler);
+            $win.bind('keydown', opts, editKeyKandler);
         }
         $win.bind('keyup', adjustTextAreaHeight);
 
@@ -119,7 +122,7 @@
 
                 // remove textarea and size toggles
                 $textArea.remove();
-                $win.unbind('keydown', fontSizeToggler);
+                $win.unbind('keydown', editKeyKandler);
                 $win.unbind('keyup', adjustTextAreaHeight);
 
                 // Run callback
@@ -212,6 +215,7 @@
                 event : 'dblclick',
                 touch : true,
                 lineBreaks : true,
+                closeOnEnter: true,
                 toggleFontSize : true
             }, opts);
 
